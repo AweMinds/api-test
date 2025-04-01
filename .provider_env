@@ -1,0 +1,11 @@
+[XIAOAI]
+api_key = sk-TIL4r0GAdtlH3rLrasj4K5lOqE6YZNf7hzVtjLq7alzzzjTe
+base_url = https://pro.xiaoai.plus/v1
+
+[OPENROUTER]
+api_key = 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
+base_url = https://openrouter.ai/api/v1
+
+[ALIYUN]
+api_key = sk-ff9b065a67944b6eb55e1a6e78ffa4af
+base_url = https://dashscope.aliyuncs.com/compatible-mode/v1
