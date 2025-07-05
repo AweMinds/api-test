@@ -3,9 +3,25 @@ api_key = sk-TIL4r0GAdtlH3rLrasj4K5lOqE6YZNf7hzVtjLq7alzzzjTe
 base_url = https://pro.xiaoai.plus/v1
 
 [OPENROUTER]
-api_key = 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
+api_key = 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
 base_url = https://openrouter.ai/api/v1
 
 [ALIYUN]
 api_key = sk-ff9b065a67944b6eb55e1a6e78ffa4af
 base_url = https://dashscope.aliyuncs.com/compatible-mode/v1
+
+[YUNWU-OPENAI]
+api_key = sk-O2Dkm04QzzoFTizPRc0j0OUoZJecJEa83opbRFyObumNsxIV
+base_url = https://yunwu.ai/v1
+
+[YUNWU-GEMINI]
+api_key = sk-xMhP6nW0YKK6SnvWJ71wfTDhuqT2e0GARG7maxK2ww04MuIH
+base_url = https://yunwu.ai/v1
+
+[YUNWU-CLAUDE]
+api_key = sk-7hVxaRDesmC9tGsl9B1hdeLn6QKi384pNhX1xkPTNG0i5FLW
+base_url = https://yunwu.ai/v1
+
+[YUNWU-Dev]
+api_key = sk-bM2nmbQYKSPnxHImKJAdY75lJSmmuqYB5dMtXRRLkQJOoxMh
+base_url = https://yunwu.ai/v1

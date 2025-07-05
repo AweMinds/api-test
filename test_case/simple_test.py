@@ -7,8 +7,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from LLM.openai_based_api import process_content
 
 def main():
-    provider_name = "OPENROUTER"
-    model = "google/gemini-2.5-pro-exp-03-25:free"
+    provider_name = "YUNWU-Dev"
+    model = "gpt-4.1-2025-04-14"
     user_prompt = "strawberry中有几个r？"
     
     # Call the API with default settings
@@ -20,7 +20,7 @@ def main():
     
     # Print the result
     print("\nAPI Response:")
-    print(response["result"])
+    print(response)
 
 if __name__ == "__main__":
     main()

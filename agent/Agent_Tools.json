@@ -1,0 +1,86 @@
+{
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "full_text_search",
+        "description": "执行全文搜索，在知识库中搜索包含指定关键词的所有文档内容",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "要搜索的关键词或短语"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "返回结果的最大数量，默认为10",
+              "default": 10
+            }
+          },
+          "required": ["query"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "keyword_search",
+        "description": "基于关键词的精确搜索，适用于查找特定术语或概念",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "keywords": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "要搜索的关键词列表"
+            },
+            "match_type": {
+              "type": "string",
+              "enum": ["all", "any"],
+              "description": "匹配类型：'all'表示必须包含所有关键词，'any'表示包含任意关键词即可",
+              "default": "any"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "返回结果的最大数量，默认为10",
+              "default": 10
+            }
+          },
+          "required": ["keywords"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "vector_search",
+        "description": "基于语义相似度的向量搜索，能够找到语义相关的内容，即使关键词不完全匹配",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "要搜索的查询内容，可以是问题、句子或段落"
+            },
+            "similarity_threshold": {
+              "type": "number",
+              "description": "相似度阈值，范围0-1，越高表示要求越相似",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.7
+            },
+            "limit": {
+              "type": "integer",
+              "description": "返回结果的最大数量，默认为10",
+              "default": 10
+            }
+          },
+          "required": ["query"]
+        }
+      }
+    }
+  ]
+} 

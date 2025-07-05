@@ -50,7 +50,7 @@ def get_openai_client(provider_name):
         base_url=provider['base_url']
     )
 
-def process_content(provider_name, user_prompt, model, content=None, system_prompt=None, max_tokens=None, response_format=None, n=1, temperature=None):
+def process_content(provider_name, user_prompt, model, content=None, system_prompt=None, max_tokens=None, response_format=None, n=1, temperature=None, tools=None, tool_choice=None):
     """
     Process content using the specified provider.
     
@@ -64,9 +64,11 @@ def process_content(provider_name, user_prompt, model, content=None, system_prom
         response_format: Optional response format specification
         n: Number of completions to generate (default 1)
         temperature: Optional temperature setting for response generation
+        tools: Optional list of tools available for function calling
+        tool_choice: Optional tool choice setting ("auto", "none", or specific tool)
         
     Returns:
-        Dictionary containing the result, token counts, and elapsed time
+        Dictionary containing the result, token counts, elapsed time, and tool calls if any
     """
     # Get the OpenAI client for the specified provider
     client = get_openai_client(provider_name)
@@ -91,6 +93,8 @@ def process_content(provider_name, user_prompt, model, content=None, system_prom
         if system_prompt:
             print("System message:", system_prompt)
         print("\nUser message:", messages[-1]["content"])
+        if tools:
+            print("Tools:", json.dumps(tools, indent=2))
         print("=== End Model Input ===\n")
 
     start_time = time.time()
@@ -112,12 +116,21 @@ def process_content(provider_name, user_prompt, model, content=None, system_prom
         api_params["response_format"] = response_format
         if PRINT_INPUT:
             print("Response format:", json.dumps(response_format, indent=2))
+    
+    # Add tools and tool_choice if provided
+    if tools:
+        api_params["tools"] = tools
+        if tool_choice:
+            api_params["tool_choice"] = tool_choice
+        elif tool_choice is None:
+            api_params["tool_choice"] = "auto"
 
     max_retries = 5
     base_delay = 30
     input_tokens = 0
     output_tokens = 0
     result = ""
+    tool_calls = None
 
     for attempt in range(max_retries):
         try:
@@ -134,7 +147,15 @@ def process_content(provider_name, user_prompt, model, content=None, system_prom
                 print(completion, flush=True)
                 raise ValueError("Unexpected API response format")
             
-            result = completion.choices[0].message.content.strip()
+            # Handle tool calls if present
+            message = completion.choices[0].message
+            if hasattr(message, 'tool_calls') and message.tool_calls:
+                tool_calls = message.tool_calls
+                result = message.content or ""
+                print(f"Model made {len(tool_calls)} tool call(s)", flush=True)
+            else:
+                result = message.content.strip() if message.content else ""
+            
             print(f"Successfully received response from {provider_name} API", flush=True)
             
             input_tokens = completion.usage.prompt_tokens
@@ -167,12 +188,17 @@ def process_content(provider_name, user_prompt, model, content=None, system_prom
 
     print(f"Processing {provider_name} API completed. Input tokens: {input_tokens}, Output tokens: {output_tokens}", flush=True)
 
-    return {
+    response_data = {
         "result": result,
         "input_tokens": input_tokens,
         "output_tokens": output_tokens,
         "elapsed_time": elapsed_time
     }
+    
+    if tool_calls:
+        response_data["tool_calls"] = tool_calls
+
+    return response_data
 
 print("openai_based_api.py module loaded", flush=True)
 
